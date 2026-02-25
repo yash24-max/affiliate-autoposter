@@ -128,9 +128,37 @@ export function AppShell() {
                     </div>
                 </header>
 
-                <main className="flex-1 overflow-y-auto p-8 lg:p-10 bg-bg-base/50 backdrop-blur-sm">
+                <main className="flex-1 overflow-y-auto p-8 lg:p-10 bg-bg-base/50 backdrop-blur-sm relative">
                     <div className="max-w-6xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <Outlet />
+                    </div>
+
+                    {/* Holiday Badge - Only shown in internal app */}
+                    <div className="fixed bottom-6 right-6 z-50 group pointer-events-none sm:pointer-events-auto">
+                        <div className="relative">
+                            <div className="absolute inset-0 bg-brand-primary/20 rounded-full blur-xl group-hover:bg-brand-primary/40 transition-all duration-500 animate-pulse" />
+                            <div className="bg-white border-4 border-success-ui p-2 rounded-full shadow-2xl elevation-2 hover:scale-110 transition-transform duration-500 cursor-help relative overflow-hidden group">
+                                <svg width="32" height="32" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="32" cy="32" r="30" fill="#87CEEB" />
+                                    <path d="M32 50C40 50 48 44 48 36C48 30 42 28 32 28C22 28 16 30 16 36C16 44 24 50 32 50Z" fill="#FFD700" opacity="0.4" />
+                                    <path d="M30 48L32 30" stroke="#8B4513" stroke-width="4" stroke-linecap="round" />
+                                    <path d="M32 30C32 30 42 28 45 22" stroke="#228B22" stroke-width="3" stroke-linecap="round" />
+                                    <path d="M32 30C32 30 38 34 40 40" stroke="#228B22" stroke-width="3" stroke-linecap="round" />
+                                    <path d="M32 30C32 30 22 28 19 22" stroke="#228B22" stroke-width="3" stroke-linecap="round" />
+                                    <path d="M32 30C32 30 26 34 24 40" stroke="#228B22" stroke-width="3" stroke-linecap="round" />
+                                    <circle cx="50" cy="14" r="6" fill="#FF4500" />
+                                </svg>
+                                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/30 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                            </div>
+                        </div>
+
+                        {/* Hover Tooltip */}
+                        <div className="absolute bottom-full right-0 mb-4 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 pointer-events-none">
+                            <div className="bg-text-primary text-white text-xs font-bold py-2 px-4 rounded-xl shadow-2xl whitespace-nowrap border border-white/10">
+                                Holiday Mode: Active 🌴
+                                <div className="text-[10px] text-white/60 font-medium">Passive income strategy running</div>
+                            </div>
+                        </div>
                     </div>
                 </main>
             </div>
