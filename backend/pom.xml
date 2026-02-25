@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ═══════════════════════════════════════════════
+         PARENT — Spring Boot provides default plugin
+         versions, dependency versions, and build config
+         ═══════════════════════════════════════════════ -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.3</version>
+        <relativePath/>
+    </parent>
+
+    <!-- ═══════════════════════════════════════════════
+         THIS PROJECT'S IDENTITY
+         groupId   — your org / package root
+         artifactId — name of this parent module
+         version    — shared across all child modules
+         packaging  — pom means "I am a parent, not a JAR"
+         ═══════════════════════════════════════════════ -->
+    <groupId>com.autoposter</groupId>
+    <artifactId>affiliate-autoposter-backend</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Affiliate Autoposter — Backend</name>
+    <description>Parent POM for all backend microservices</description>
+
+    <!-- ═══════════════════════════════════════════════
+         CHILD MODULES
+         Maven will build these in order.
+         Add new services here as you create them.
+         ═══════════════════════════════════════════════ -->
+    <modules>
+        <module>api-gateway</module>
+        <!-- future: auth-service, user-config-service, scheduler-service, etc. -->
+    </modules>
+
+    <!-- ═══════════════════════════════════════════════
+         PROPERTIES
+         Java version + encoding for all child modules.
+         ═══════════════════════════════════════════════ -->
+    <properties>
+        <java.version>21</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-cloud.version>2023.0.1</spring-cloud.version>
+        <jjwt.version>0.12.5</jjwt.version>
+    </properties>
+
+    <!-- ═══════════════════════════════════════════════
+         DEPENDENCY MANAGEMENT
+         Versions declared here are inherited by all
+         child modules — they only need to declare the
+         groupId + artifactId, never the version.
+         ═══════════════════════════════════════════════ -->
+    <dependencyManagement>
+        <dependencies>
+
+            <!-- Spring Cloud BOM — manages versions for
+                 Gateway, LoadBalancer, etc. -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- JWT library — split into 3 jars:
+                 api  (compile-time interface)
+                 impl (runtime implementation)
+                 jackson (JSON parsing support) -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jjwt.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+</project>

@@ -1,0 +1,40 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+  # TODO: Add route definitions here (or keep in RouteConfig.java)
+  cloud:
+    gateway:
+      routes: []  # placeholder — routes will be defined in RouteConfig.java
+
+  # TODO: Redis connection (for rate limiting + JWT blacklist)
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+# JWT config — read in JwtAuthFilter
+app:
+  jwt:
+    secret: ${JWT_SECRET:change-this-secret-in-production}
+    expiry: ${JWT_EXPIRY:900}  # seconds (15 minutes)
+
+  # Downstream service URLs
+  services:
+    auth:       ${AUTH_SERVICE_URL:http://localhost:8081}
+    user-config: ${USER_CONFIG_SERVICE_URL:http://localhost:8082}
+    scheduler:  ${SCHEDULER_SERVICE_URL:http://localhost:8083}
+    dashboard:  ${DASHBOARD_SERVICE_URL:http://localhost:8086}
+
+  # CORS
+  cors:
+    allowed-origin: ${FRONTEND_ORIGIN:http://localhost:5173}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

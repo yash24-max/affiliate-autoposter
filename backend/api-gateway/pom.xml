@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ═══════════════════════════════════════════════
+         PARENT — inherits versions + build config
+         from the backend parent pom.xml one level up
+         ═══════════════════════════════════════════════ -->
+    <parent>
+        <groupId>com.autoposter</groupId>
+        <artifactId>affiliate-autoposter-backend</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <!-- ═══════════════════════════════════════════════
+         THIS MODULE'S IDENTITY
+         packaging defaults to jar — this module
+         produces a runnable Spring Boot JAR
+         ═══════════════════════════════════════════════ -->
+    <artifactId>api-gateway</artifactId>
+    <name>API Gateway</name>
+    <description>
+        Spring Cloud Gateway — single entry point for all frontend traffic.
+        Handles JWT validation, routing, CORS, rate limiting, and traceId injection.
+    </description>
+
+    <!-- ═══════════════════════════════════════════════
+         DEPENDENCIES
+         No versions needed here — all managed by parent.
+         ═══════════════════════════════════════════════ -->
+    <dependencies>
+
+        <!-- Spring Cloud Gateway (REACTIVE / WebFlux based)
+             Important: this is NOT servlet-based Spring MVC.
+             Gateway uses Project Reactor (Mono/Flux) for
+             non-blocking, high-throughput request routing. -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-gateway</artifactId>
+        </dependency>
+
+        <!-- Redis (Reactive) — used for two things:
+             1. Rate limiting (RequestRateLimiter filter)
+             2. Checking JWT blacklist on logout -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
+        </dependency>
+
+        <!-- JWT — for validating tokens in JwtAuthFilter -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- Actuator — exposes /actuator/health for health checks -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- Lombok — reduces boilerplate (@Slf4j, @RequiredArgsConstructor) -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <!-- ═══════════════════════════════════════════════
+         BUILD
+         spring-boot-maven-plugin packages this into
+         a fat/uber JAR that can run with: java -jar
+         Exclude Lombok from the final JAR (compile only)
+         ═══════════════════════════════════════════════ -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
