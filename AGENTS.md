@@ -20,13 +20,19 @@ AGENTS.md does not own:
 Primary backend work happens in `backend/` with shared contracts in `shared/`.
 
 Prefer domain-first modules, for example:
-- `backend/auth`
-- `backend/scheduler`
-- `backend/integrations/amazon`
-- `backend/integrations/telegram`
-- `backend/dashboard`
+- `backend/auth-service`
+- `backend/scheduler-service`
+- `backend/fetcher-service`
+- `backend/pusher-service`
+- `backend/dashboard-service`
 
 Keep controllers thin, services explicit, and repositories focused on persistence concerns.
+
+## Backend Documentation
+- Full V1 specification: [`backend/docs/v1.md`](backend/docs/v1.md)
+- V2 delta (image templates, Pinterest): [`backend/docs/v2.md`](backend/docs/v2.md)
+- V3 delta (multi-platform, AI, Kafka): [`backend/docs/v3.md`](backend/docs/v3.md)
+- V4 delta (billing, agency, SaaS scale): [`backend/docs/v4.md`](backend/docs/v4.md)
 
 ## Backend Development Commands
 Run commands from `backend/`:
@@ -35,10 +41,10 @@ Run commands from `backend/`:
 - `./mvnw test`: run backend verification suite if configured.
 
 Use `rg` for fast backend search, for example:
-- `rg "POST /api/schedule" docs/03-backend`
+- `rg "POST /api/schedule" backend/docs`
 
 ## API, Auth, and Data Conventions
-- Follow API naming and field contracts in `docs/03-backend/backend-api-spec.md`.
+- Follow API naming and field contracts in `backend/docs/v1.md`.
 - Standardize error responses with `errorCode`, `message`, `traceId`, and `timestamp`.
 - Enforce least-privilege authorization on every protected endpoint.
 - Never store integration credentials in plaintext; use encrypted-at-rest patterns.

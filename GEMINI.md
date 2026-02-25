@@ -31,10 +31,12 @@ This file (GEMINI.md) is the authoritative context for **Frontend Development an
 4. **Accessibility (a11y):** Use semantic HTML and ensure keyboard navigability.
 5. **Performance:** Lazy-load routes and optimize images/assets for fast initial load.
 
-## Primary Documentation References
-- `docs/02-frontend/`: Detailed architecture and UI flow specifications.
-- `docs/05-product-business/user-personas-and-journey.md`: Context for UX decisions.
-- `docs/00-overview/glossary.md`: Consistency in terminology across the UI.
+## Frontend Documentation
+- Full V1 specification: [`frontend/docs/v1.md`](frontend/docs/v1.md)
+- V2 delta (template picker, Pinterest): [`frontend/docs/v2.md`](frontend/docs/v2.md)
+- V3 delta (click analytics, AI config, multi-platform): [`frontend/docs/v3.md`](frontend/docs/v3.md)
+- V4 delta (subscription, agency view, white-label): [`frontend/docs/v4.md`](frontend/docs/v4.md)
+- Terminology reference: [`docs/overview/glossary.md`](docs/overview/glossary.md)
 
 ## Directory Focus
 - `frontend/`: Implementation of the React application.
