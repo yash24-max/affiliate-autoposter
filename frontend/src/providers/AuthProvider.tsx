@@ -1,0 +1,113 @@
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
+import { authService, type User } from "../api/auth";
+
+interface AuthContextType {
+    user: User | null;
+    isAuthenticated: boolean;
+    isLoading: boolean;
+    error: string | null;
+    login: (email: string, password: string) => Promise<void>;
+    register: (name: string, email: string, password: string) => Promise<void>;
+    logout: () => void;
+    clearError: () => void;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+    const [user, setUser] = useState<User | null>(() => {
+        const saved = localStorage.getItem("user");
+        return saved ? JSON.parse(saved) : null;
+    });
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    const navigate = useNavigate();
+
+    // Initial session restoration
+    useEffect(() => {
+        const checkAuth = async () => {
+            const token = localStorage.getItem("token");
+            if (token) {
+                try {
+                    const { user: userData } = await authService.getMe();
+                    setUser(userData);
+                    localStorage.setItem("user", JSON.stringify(userData));
+                } catch (err) {
+                    console.error("Session restore failed", err);
+                    logout();
+                }
+            }
+            setIsLoading(false);
+        };
+
+        checkAuth();
+    }, []);
+
+    const login = async (email: string, password: string) => {
+        setIsLoading(true);
+        setError(null);
+        try {
+            const { user: userData, token } = await authService.login(email, password);
+            setUser(userData);
+            localStorage.setItem("token", token);
+            localStorage.setItem("user", JSON.stringify(userData));
+            navigate("/dashboard");
+        } catch (err: any) {
+            setError(err.response?.data?.message || "Invalid credentials. Please try again.");
+            throw err;
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const register = async (name: string, email: string, password: string) => {
+        setIsLoading(true);
+        setError(null);
+        try {
+            const { user: userData, token } = await authService.register(name, email, password);
+            setUser(userData);
+            localStorage.setItem("token", token);
+            localStorage.setItem("user", JSON.stringify(userData));
+            navigate("/setup");
+        } catch (err: any) {
+            setError(err.response?.data?.message || "Registration failed. Email might already exist.");
+            throw err;
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const logout = () => {
+        setUser(null);
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        navigate("/login");
+    };
+
+    const clearError = () => setError(null);
+
+    return (
+        <AuthContext.Provider value={{
+            user,
+            isAuthenticated: !!user,
+            isLoading,
+            error,
+            login,
+            register,
+            logout,
+            clearError
+        }}>
+            {children}
+        </AuthContext.Provider>
+    );
+}
+
+export function useAuth() {
+    const context = useContext(AuthContext);
+    if (context === undefined) {
+        throw new Error("useAuth must be used within an AuthProvider");
+    }
+    return context;
+}

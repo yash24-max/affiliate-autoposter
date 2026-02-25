@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-base: #F8FAFC;
+  --color-bg-surface: #FFFFFF;
+  --color-bg-subtle: #F1F5F9;
+  --color-border-ui: #E2E8F0;
+
+  /* Material-inspired vibrant colors */
+  --color-brand-primary: #4F46E5;
+  --color-brand-secondary: #7C3AED;
+  --color-accent-blue: #0EA5E9;
+  --color-accent-teal: #0D9488;
+
+  --color-success-ui: #10B981;
+  --color-warning-ui: #F59E0B;
+  --color-danger-ui: #EF4444;
+
+  --color-text-primary: #0F172A;
+  --color-text-secondary: #64748B;
+  --color-text-disabled: #94A3B8;
+
+  --font-inter: "Inter", sans-serif;
+}
+
+@layer base {
+  :root {
+    --background: theme(--color-bg-base);
+    --foreground: theme(--color-text-primary);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-inter);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+
+  /* Material 3 Style Cards (Light) */
+  .glass {
+    background: #FFFFFF;
+    border: 1px solid theme(--color-border-ui);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    border-color: theme(--color-brand-primary / 20%);
+  }
+
+  .glow-brand {
+    box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.2), 0 4px 6px -4px rgba(79, 70, 229, 0.1);
+  }
+
+  /* Elevation styles */
+  .elevation-1 {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  }
+
+  .elevation-2 {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+}
