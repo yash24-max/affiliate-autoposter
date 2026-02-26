@@ -17,14 +17,14 @@ AGENTS.md does not own:
 - Infrastructure, DevOps, cloud, testing frameworks, and product decisions (owned by `CLAUDE.md`)
 
 ## Backend Structure & Module Organization
-Primary backend work happens in `backend/` with shared contracts in `shared/`.
+Primary backend work happens in `backend/project-backend/` with shared contracts in `shared/`.
 
 Prefer domain-first modules, for example:
-- `backend/auth-service`
-- `backend/scheduler-service`
-- `backend/fetcher-service`
-- `backend/pusher-service`
-- `backend/dashboard-service`
+- `backend/project-backend/auth-service`
+- `backend/project-backend/scheduler-service`
+- `backend/project-backend/fetcher-service`
+- `backend/project-backend/pusher-service`
+- `backend/project-backend/dashboard-service`
 
 Keep controllers thin, services explicit, and repositories focused on persistence concerns.
 
@@ -35,10 +35,10 @@ Keep controllers thin, services explicit, and repositories focused on persistenc
 - V4 delta (billing, agency, SaaS scale): [`backend/docs/v4.md`](backend/docs/v4.md)
 
 ## Backend Development Commands
-Run commands from `backend/`:
-- `./mvnw spring-boot:run`: start backend service locally.
-- `./mvnw clean package`: compile and package backend artifacts.
-- `./mvnw test`: run backend verification suite if configured.
+Run commands from `backend/project-backend/`:
+- `mvn spring-boot:run`: start backend service locally.
+- `mvn clean package`: compile and package backend artifacts.
+- `mvn test`: run backend verification suite if configured.
 
 Use `rg` for fast backend search, for example:
 - `rg "POST /api/schedule" backend/docs`
