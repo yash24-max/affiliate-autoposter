@@ -28,5 +28,5 @@ V1/V2 use synchronous internal REST calls (Fetcher → Pusher). V3 migrates this
 ## Layer Documentation Links
 
 - Frontend V3: [frontend/docs/v3.md](../../frontend/docs/v3.md)
-- Backend V3: [backend/docs/v3.md](../../backend/docs/v3.md)
+- Backend V3: [backend/docs/v3.md](../../autoposter-backend/docs/v3.md)
 - Infra V3: [infra/docs/v3.md](../../infra/docs/v3.md)

@@ -28,5 +28,5 @@ Transform the product into a polished, scalable, multi-tenant SaaS business.
 ## Layer Documentation Links
 
 - Frontend V4: [frontend/docs/v4.md](../../frontend/docs/v4.md)
-- Backend V4: [backend/docs/v4.md](../../backend/docs/v4.md)
+- Backend V4: [backend/docs/v4.md](../../autoposter-backend/docs/v4.md)
 - Infra V4: [infra/docs/v4.md](../../infra/docs/v4.md)

@@ -29,10 +29,10 @@ Prefer domain-first modules, for example:
 Keep controllers thin, services explicit, and repositories focused on persistence concerns.
 
 ## Backend Documentation
-- Full V1 specification: [`backend/docs/v1.md`](backend/docs/v1.md)
-- V2 delta (image templates, Pinterest): [`backend/docs/v2.md`](backend/docs/v2.md)
-- V3 delta (multi-platform, AI, Kafka): [`backend/docs/v3.md`](backend/docs/v3.md)
-- V4 delta (billing, agency, SaaS scale): [`backend/docs/v4.md`](backend/docs/v4.md)
+- Full V1 specification: [`backend/docs/v1.md`](autoposter-backend/docs/v1.md)
+- V2 delta (image templates, Pinterest): [`backend/docs/v2.md`](autoposter-backend/docs/v2.md)
+- V3 delta (multi-platform, AI, Kafka): [`backend/docs/v3.md`](autoposter-backend/docs/v3.md)
+- V4 delta (billing, agency, SaaS scale): [`backend/docs/v4.md`](autoposter-backend/docs/v4.md)
 
 ## Backend Development Commands
 Run commands from `backend/project-backend/`:

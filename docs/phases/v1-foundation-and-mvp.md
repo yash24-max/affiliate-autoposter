@@ -86,5 +86,5 @@ All three passing = V1 release ready.
 ## Layer Documentation Links
 
 - Frontend V1: [frontend/docs/v1.md](../../frontend/docs/v1.md)
-- Backend V1: [backend/docs/v1.md](../../backend/docs/v1.md)
+- Backend V1: [backend/docs/v1.md](../../autoposter-backend/docs/v1.md)
 - Infra V1: [infra/docs/v1.md](../../infra/docs/v1.md)

@@ -28,5 +28,5 @@ Pinterest pins have a lifespan of months to years. A pin posted today can drive 
 ## Layer Documentation Links
 
 - Frontend V2: [frontend/docs/v2.md](../../frontend/docs/v2.md)
-- Backend V2: [backend/docs/v2.md](../../backend/docs/v2.md)
+- Backend V2: [backend/docs/v2.md](../../autoposter-backend/docs/v2.md)
 - Infra V2: [infra/docs/v2.md](../../infra/docs/v2.md)

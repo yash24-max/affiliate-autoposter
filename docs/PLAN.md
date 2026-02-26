@@ -19,10 +19,10 @@ A B2C SaaS platform where users connect their Amazon affiliate account and Teleg
 
 | Version | Frontend | Backend | Infra |
 |---------|----------|---------|-------|
-| V1 | [frontend/docs/v1.md](../frontend/docs/v1.md) | [backend/docs/v1.md](../backend/docs/v1.md) | [infra/docs/v1.md](../infra/docs/v1.md) |
-| V2 | [frontend/docs/v2.md](../frontend/docs/v2.md) | [backend/docs/v2.md](../backend/docs/v2.md) | [infra/docs/v2.md](../infra/docs/v2.md) |
-| V3 | [frontend/docs/v3.md](../frontend/docs/v3.md) | [backend/docs/v3.md](../backend/docs/v3.md) | [infra/docs/v3.md](../infra/docs/v3.md) |
-| V4 | [frontend/docs/v4.md](../frontend/docs/v4.md) | [backend/docs/v4.md](../backend/docs/v4.md) | [infra/docs/v4.md](../infra/docs/v4.md) |
+| V1 | [frontend/docs/v1.md](../frontend/docs/v1.md) | [backend/docs/v1.md](../autoposter-backend/docs/v1.md) | [infra/docs/v1.md](../infra/docs/v1.md) |
+| V2 | [frontend/docs/v2.md](../frontend/docs/v2.md) | [backend/docs/v2.md](../autoposter-backend/docs/v2.md) | [infra/docs/v2.md](../infra/docs/v2.md) |
+| V3 | [frontend/docs/v3.md](../frontend/docs/v3.md) | [backend/docs/v3.md](../autoposter-backend/docs/v3.md) | [infra/docs/v3.md](../infra/docs/v3.md) |
+| V4 | [frontend/docs/v4.md](../frontend/docs/v4.md) | [backend/docs/v4.md](../autoposter-backend/docs/v4.md) | [infra/docs/v4.md](../infra/docs/v4.md) |
 
 Phase details: [docs/phases/](phases/)
 

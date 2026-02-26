@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ae413fd5-3b77-46c1-b5d5-1d5cd148c827" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/autoposter/App.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/autoposter/AppTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AGENTS.md" beforeDir="false" afterPath="$PROJECT_DIR$/../AGENTS.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/docs/v1.md" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/docs/v1.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/docs/v2.md" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/docs/v2.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/docs/v3.md" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/docs/v3.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/docs/v4.md" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/docs/v4.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/.idea/copilot.data.migration.agent.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/api-gateway/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/api-gateway/src/main/java/com/autoposter/gateway/GatewayApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/api-gateway/src/main/java/com/autoposter/gateway/config/CorsConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/api-gateway/src/main/java/com/autoposter/gateway/config/RateLimitConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/api-gateway/src/main/java/com/autoposter/gateway/config/RouteConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/api-gateway/src/main/java/com/autoposter/gateway/filter/JwtAuthFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/api-gateway/src/main/java/com/autoposter/gateway/filter/TraceIdFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/api-gateway/src/main/resources/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/api-gateway/src/test/java/com/autoposter/gateway/GatewayApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/api-gateway/src/test/resources/mockito-extensions/org.mockito.plugins.MockMaker" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/dashboard-service/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/dashboard-service/src/main/java/com/yash/autoposter/App.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/dashboard-service/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/dashboard-service/src/main/resources/templates/hello.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/dashboard-service/src/test/java/com/yash/autoposter/HelloControllerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/dashboard-service/src/test/resources/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/dashboard-service/src/test/resources/mockito-extensions/org.mockito.plugins.MockMaker" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/project-backend/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/PLAN.md" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/PLAN.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/phases/v1-foundation-and-mvp.md" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/phases/v1-foundation-and-mvp.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/phases/v2-visual-pinterest.md" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/phases/v2-visual-pinterest.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/phases/v3-multiplatform-ai.md" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/phases/v3-multiplatform-ai.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/phases/v4-saas-scale.md" beforeDir="false" afterPath="$PROJECT_DIR$/../docs/phases/v4-saas-scale.md" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_/home/yasva/affiliate-autoposter/autoposter-backend" value="3ACiu9UgR4Fsv4kXyE8wrckomsQ" />
+    </persistenceIdMap>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 5
+}]]></component>
+  <component name="ProjectId" id="3ACiu9UgR4Fsv4kXyE8wrckomsQ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.59" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.59" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ae413fd5-3b77-46c1-b5d5-1d5cd148c827" name="Changes" comment="" />
+      <created>1772103174736</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1772103174736</updated>
+      <workItem from="1772103175794" duration="5000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
+  </component>
+</project>
