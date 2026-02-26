@@ -8,17 +8,16 @@ import java.security.SecureRandom;
 import java.util.Base64;
 
 /**
- * AES-256-GCM encrypt/decrypt utility.
- * Key is loaded from the ENCRYPTION_MASTER_KEY environment variable (Base64-encoded 32-byte key).
- * Output format: Base64(IV || ciphertext+authTag).
+ * AES-256-GCM encrypt/decrypt utility. Key is loaded from the ENCRYPTION_MASTER_KEY environment variable (Base64-encoded 32-byte key). Output format:
+ * Base64(IV || ciphertext+authTag).
  */
 public class AES256GCMEncryptor {
 
-    private static final String ALGORITHM = "AES/GCM/NoPadding";
-    private static final int GCM_IV_LENGTH = 12;
-    private static final int GCM_TAG_LENGTH = 128;
+    private static final String ALGORITHM      = "AES/GCM/NoPadding";
+    private static final int    GCM_IV_LENGTH  = 12;
+    private static final int    GCM_TAG_LENGTH = 128;
 
-    private final SecretKey secretKey;
+    private final SecretKey    secretKey;
     private final SecureRandom secureRandom = new SecureRandom();
 
     public AES256GCMEncryptor() {
