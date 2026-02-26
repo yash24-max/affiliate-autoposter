@@ -18,6 +18,7 @@
     <name>Affiliate Autoposter Backend</name>
     <description>Parent POM for backend services</description>
     <modules>
+        <module>shared</module>
         <module>eureka-service</module>
     </modules>
 
