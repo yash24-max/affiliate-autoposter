@@ -7,9 +7,9 @@ import java.time.Instant;
 @Getter
 public class ErrorResponse {
 
-    private final String errorCode;
-    private final String message;
-    private final String traceId;
+    private final String  errorCode;
+    private final String  message;
+    private final String  traceId;
     private final Instant timestamp;
 
     public ErrorResponse(String errorCode, String message, String traceId) {

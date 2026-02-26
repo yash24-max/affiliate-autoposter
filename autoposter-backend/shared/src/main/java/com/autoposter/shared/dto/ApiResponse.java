@@ -7,8 +7,8 @@ import java.time.Instant;
 @Getter
 public class ApiResponse<T> {
 
-    private final T data;
-    private final String traceId;
+    private final T       data;
+    private final String  traceId;
     private final Instant timestamp;
 
     private ApiResponse(T data, String traceId) {

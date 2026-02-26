@@ -7,9 +7,10 @@ import java.util.UUID;
 public final class TraceIdUtil {
 
     public static final String HEADER_NAME = "X-Trace-Id";
-    public static final String MDC_KEY = "traceId";
+    public static final String MDC_KEY     = "traceId";
 
-    private TraceIdUtil() {}
+    private TraceIdUtil() {
+    }
 
     public static String generate() {
         return UUID.randomUUID().toString();

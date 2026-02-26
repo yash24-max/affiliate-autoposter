@@ -13,12 +13,12 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class ProductPayload {
 
-    private String asin;
-    private String title;
+    private String     asin;
+    private String     title;
     private BigDecimal price;
-    private Integer discountPct;
-    private Double rating;
-    private String imageUrl;
-    private String affiliateUrl;
-    private String category;
+    private Integer    discountPct;
+    private Double     rating;
+    private String     imageUrl;
+    private String     affiliateUrl;
+    private String     category;
 }
