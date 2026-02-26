@@ -1,4 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { useAmazonConfig } from "../../hooks/useAmazonConfig";
+import { useTelegramConfig } from "../../hooks/useTelegramConfig";
+import { useSchedule } from "../../hooks/useSchedule";
 import {
     ShoppingBag,
     Send,
@@ -20,10 +25,75 @@ const steps = [
 ];
 
 export default function SetupWizard() {
+    const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState(1);
+
+    const { updateConfig: updateAmazon, isUpdating: isAmazonUpdating } = useAmazonConfig();
+    const { updateConfig: updateTelegram, testConnection: testTelegram, isUpdating: isTelegramUpdating, isTesting: isTelegramTesting } = useTelegramConfig();
+    const { updateSchedule, activateSchedule, isUpdating: isScheduleUpdating } = useSchedule();
+
+    // Amazon Form
+    const { register: registerAmazon, handleSubmit: handleSubmitAmazon } = useForm({
+        defaultValues: {
+            accessKey: "",
+            secretKey: "",
+            affiliateTag: "",
+            region: "US (amazon.com)"
+        }
+    });
+
+    // Telegram Form
+    const { register: registerTelegram, handleSubmit: handleSubmitTelegram } = useForm({
+        defaultValues: {
+            botToken: "",
+            channelId: ""
+        }
+    });
+
+    const handleAmazonSubmit = (data: any) => {
+        // Map to API expected structure (ignoring keys for mock if needed, or sending them if backend expects them initially to test)
+        // Adjust according to the exact `AmazonConfigResponse` fields if needed.
+        updateAmazon({ affiliateTag: data.affiliateTag }, {
+            onSuccess: () => nextStep()
+        });
+    };
+
+    const handleTelegramSubmit = (data: any) => {
+        updateTelegram({ channelId: data.channelId, channelName: data.channelId }, {
+            onSuccess: () => nextStep()
+        });
+    };
+
+    const handleFiltersSubmit = () => {
+        // Step 3 is preferences (stubbed save for now)
+        nextStep();
+    };
+
+    const handleScheduleSubmit = () => {
+        // Step 4 is Schedule
+        updateSchedule({
+            postsPerDay: 5, // Mock value
+            postingTimes: ["09:00", "12:00", "15:00", "18:00", "21:00"],
+            activeCategories: ["Electronics", "Fashion"],
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            isActive: true
+        }, {
+            onSuccess: () => {
+                activateSchedule();
+                navigate("/dashboard");
+            }
+        });
+    };
 
     const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, steps.length));
     const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
+
+    const handleNextClick = () => {
+        if (currentStep === 1) handleSubmitAmazon(handleAmazonSubmit)();
+        else if (currentStep === 2) handleSubmitTelegram(handleTelegramSubmit)();
+        else if (currentStep === 3) handleFiltersSubmit();
+        else if (currentStep === 4) handleScheduleSubmit();
+    };
 
     return (
         <div className="min-h-screen bg-bg-base text-text-primary p-6 md:p-12 flex flex-col items-center">
@@ -79,10 +149,11 @@ export default function SetupWizard() {
                                 <p className="text-sm text-text-secondary">Provide your Amazon PA API credentials and tracking ID.</p>
                             </div>
 
-                            <div className="space-y-4">
+                            <form className="space-y-4" onSubmit={handleSubmitAmazon(handleAmazonSubmit)}>
                                 <div className="space-y-1.5">
                                     <label className="text-sm font-medium text-text-secondary pl-1">Access Key ID</label>
                                     <input
+                                        {...registerAmazon("accessKey", { required: true })}
                                         type="text"
                                         placeholder="AKIAIOSFODNN7EXAMPLE"
                                         className="w-full bg-bg-subtle border border-border-ui rounded-xl py-2.5 px-4 font-mono text-sm focus:outline-none focus:border-brand-primary transition-all"
@@ -91,6 +162,7 @@ export default function SetupWizard() {
                                 <div className="space-y-1.5">
                                     <label className="text-sm font-medium text-text-secondary pl-1">Secret Access Key</label>
                                     <input
+                                        {...registerAmazon("secretKey", { required: true })}
                                         type="password"
                                         placeholder="••••••••••••••••••••••••"
                                         className="w-full bg-bg-subtle border border-border-ui rounded-xl py-2.5 px-4 font-mono text-sm focus:outline-none focus:border-brand-primary transition-all"
@@ -100,6 +172,7 @@ export default function SetupWizard() {
                                     <div className="space-y-1.5">
                                         <label className="text-sm font-medium text-text-secondary pl-1">Affiliate Tag</label>
                                         <input
+                                            {...registerAmazon("affiliateTag", { required: true })}
                                             type="text"
                                             placeholder="mysite-20"
                                             className="w-full bg-bg-subtle border border-border-ui rounded-xl py-2.5 px-4 focus:outline-none focus:border-brand-primary transition-all"
@@ -107,7 +180,7 @@ export default function SetupWizard() {
                                     </div>
                                     <div className="space-y-1.5">
                                         <label className="text-sm font-medium text-text-secondary pl-1">Region</label>
-                                        <select className="w-full bg-bg-subtle border border-border-ui rounded-xl py-2.5 px-4 focus:outline-none focus:border-brand-primary transition-all appearance-none cursor-pointer">
+                                        <select {...registerAmazon("region")} className="w-full bg-bg-subtle border border-border-ui rounded-xl py-2.5 px-4 focus:outline-none focus:border-brand-primary transition-all appearance-none cursor-pointer">
                                             <option>US (amazon.com)</option>
                                             <option>UK (amazon.co.uk)</option>
                                             <option>DE (amazon.de)</option>
@@ -115,7 +188,7 @@ export default function SetupWizard() {
                                         </select>
                                     </div>
                                 </div>
-                            </div>
+                            </form>
 
                             <div className="pt-4">
                                 <button className="flex items-center gap-2 text-accent-teal hover:underline text-sm font-medium">
@@ -133,10 +206,11 @@ export default function SetupWizard() {
                                 <p className="text-sm text-text-secondary">Connect your Telegram bot to publish affiliate posts.</p>
                             </div>
 
-                            <div className="space-y-4">
+                            <form className="space-y-4" onSubmit={handleSubmitTelegram(handleTelegramSubmit)}>
                                 <div className="space-y-1.5">
                                     <label className="text-sm font-medium text-text-secondary pl-1">Bot Token</label>
                                     <input
+                                        {...registerTelegram("botToken", { required: true })}
                                         type="text"
                                         placeholder="1234567890:ABCdef..."
                                         className="w-full bg-bg-subtle border border-border-ui rounded-xl py-2.5 px-4 focus:outline-none focus:border-brand-primary transition-all"
@@ -146,17 +220,22 @@ export default function SetupWizard() {
                                 <div className="space-y-1.5">
                                     <label className="text-sm font-medium text-text-secondary pl-1">Channel ID</label>
                                     <input
+                                        {...registerTelegram("channelId", { required: true })}
                                         type="text"
                                         placeholder="@mychannel"
                                         className="w-full bg-bg-subtle border border-border-ui rounded-xl py-2.5 px-4 focus:outline-none focus:border-brand-primary transition-all"
                                     />
                                 </div>
-                            </div>
+                            </form>
 
                             <div className="pt-4">
-                                <button className="flex items-center gap-2 text-accent-teal hover:underline text-sm font-medium">
+                                <button
+                                    onClick={() => testTelegram()}
+                                    disabled={isTelegramTesting}
+                                    className="flex items-center gap-2 text-accent-teal hover:underline text-sm font-medium"
+                                >
                                     <Send className="w-4 h-4" />
-                                    Send Test Message
+                                    {isTelegramTesting ? "Sending..." : "Send Test Message"}
                                 </button>
                             </div>
                         </div>
@@ -257,10 +336,11 @@ export default function SetupWizard() {
                     </button>
 
                     <button
-                        onClick={nextStep}
+                        onClick={handleNextClick}
+                        disabled={isAmazonUpdating || isTelegramUpdating || isScheduleUpdating}
                         className="flex items-center gap-2 px-8 py-3 bg-brand-primary hover:bg-brand-primary/90 text-white rounded-xl font-bold glow-brand transition-all"
                     >
-                        {currentStep === steps.length ? "Finalize Setup" : "Next Step"}
+                        {isAmazonUpdating || isTelegramUpdating || isScheduleUpdating ? "Saving..." : currentStep === steps.length ? "Finalize Setup" : "Next Step"}
                         <ChevronRight className="w-5 h-5" />
                     </button>
                 </div>
