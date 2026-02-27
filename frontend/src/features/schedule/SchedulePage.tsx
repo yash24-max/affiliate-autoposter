@@ -24,9 +24,11 @@ export default function SchedulePage() {
     // Sync API data to local state when it loads
     useEffect(() => {
         if (schedule) {
+            /* eslint-disable react-hooks/set-state-in-effect */
             setPostsPerDay(schedule.postsPerDay || 5);
             setTimezone(schedule.timezone || "UTC");
             setIsActive(schedule.isActive || false);
+            /* eslint-enable react-hooks/set-state-in-effect */
         }
     }, [schedule]);
 

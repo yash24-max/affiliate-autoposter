@@ -18,9 +18,10 @@
     <name>Affiliate Autoposter Backend</name>
     <description>Parent POM for backend services</description>
     <modules>
-        <module>shared</module>
+        <module>common-lib</module>
         <module>api-gateway</module>
         <module>eureka-service</module>
+        <module>auth-service</module>
     </modules>
 
     <properties>

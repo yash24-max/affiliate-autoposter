@@ -6,6 +6,7 @@ import RegisterPage from "./features/auth/RegisterPage";
 import ForgotPassword from "./features/auth/ForgotPassword";
 import ResetPassword from "./features/auth/ResetPassword";
 import OAuthCallback from "./features/auth/OAuthCallback";
+import VerifyEmail from "./features/auth/VerifyEmail";
 import SetupWizard from "./features/setup/SetupWizard";
 import SchedulePage from "./features/schedule/SchedulePage";
 import SettingsPage from "./features/settings/SettingsPage";
@@ -27,6 +28,7 @@ function App() {
         </Route>
 
         <Route path="/oauth2/callback" element={<OAuthCallback />} />
+        <Route path="/verify" element={<VerifyEmail />} />
 
         {/* Protected Routes */}
         <Route element={<ProtectedRoute />}>

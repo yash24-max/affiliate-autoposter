@@ -17,6 +17,7 @@ export const useTelegramConfig = () => {
             queryClient.setQueryData(["telegramConfig"], response);
             toast.success("Telegram configuration saved");
         },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onError: (error: any) => {
             toast.error(error?.response?.data?.error?.message || "Failed to save Telegram configuration");
         }
@@ -27,6 +28,7 @@ export const useTelegramConfig = () => {
         onSuccess: (response) => {
             toast.success(response.data?.message || "Test message sent successfully!");
         },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onError: (error: any) => {
             toast.error(error?.response?.data?.error?.message || "Failed to send test message");
         }

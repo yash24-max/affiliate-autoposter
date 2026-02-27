@@ -62,7 +62,7 @@
         <!-- Shared DTOs and utilities -->
         <dependency>
             <groupId>com.autoposter</groupId>
-            <artifactId>shared</artifactId>
+            <artifactId>common-lib</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 

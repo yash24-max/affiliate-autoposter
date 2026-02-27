@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { authService, type User } from "../api/auth";
 
@@ -25,6 +25,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const navigate = useNavigate();
 
+    const logout = useCallback(() => {
+        setUser(null);
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        navigate("/login");
+    }, [navigate]);
+
     // Initial session restoration
     useEffect(() => {
         const checkAuth = async () => {
@@ -43,7 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         };
 
         checkAuth();
-    }, []);
+    }, [logout]);
 
     const login = async (email: string, password: string) => {
         setIsLoading(true);
@@ -54,9 +61,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             localStorage.setItem("token", token);
             localStorage.setItem("user", JSON.stringify(userData));
             navigate("/dashboard");
-        } catch (err: any) {
-            setError(err.response?.data?.message || "Invalid credentials. Please try again.");
-            throw err;
+        } catch (err) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const error = err as any;
+            setError(error.response?.data?.message || "Invalid credentials. Please try again.");
+            throw error;
         } finally {
             setIsLoading(false);
         }
@@ -66,25 +75,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setIsLoading(true);
         setError(null);
         try {
-            const { user: userData, token } = await authService.register(name, email, password);
-            setUser(userData);
-            localStorage.setItem("token", token);
-            localStorage.setItem("user", JSON.stringify(userData));
-            navigate("/setup");
-        } catch (err: any) {
-            setError(err.response?.data?.message || "Registration failed. Email might already exist.");
-            throw err;
+            await authService.register(name, email, password);
+            // No token returned — user must verify email before login
+        } catch (err) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const error = err as any;
+            setError(error.response?.data?.message || "Registration failed. Email might already exist.");
+            throw error;
         } finally {
             setIsLoading(false);
         }
     };
 
-    const logout = () => {
-        setUser(null);
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        navigate("/login");
-    };
+
 
     const clearError = () => setError(null);
 
@@ -104,6 +107,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
     const context = useContext(AuthContext);
     if (context === undefined) {

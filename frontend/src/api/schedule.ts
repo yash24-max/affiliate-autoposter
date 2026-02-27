@@ -22,8 +22,8 @@ export const deactivateSchedule = async (): Promise<ApiResponse<{ success: boole
 };
 
 // Assuming history returns an array of objects for now, can refine type if needed
-export const getScheduleHistory = async (page: number = 0, size: number = 10): Promise<ApiResponse<any>> => {
-    const response = await apiClient.get<ApiResponse<any>>("/schedule/history", {
+export const getScheduleHistory = async (page: number = 0, size: number = 10): Promise<ApiResponse<unknown>> => {
+    const response = await apiClient.get<ApiResponse<unknown>>("/schedule/history", {
         params: { page, size }
     });
     return response.data;

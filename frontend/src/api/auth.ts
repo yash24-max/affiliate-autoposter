@@ -29,8 +29,8 @@ export const authService = {
         return data;
     },
 
-    async register(name: string, email: string, password: string): Promise<AuthResponse> {
-        const { data } = await apiClient.post<AuthResponse>("/auth/register", {
+    async register(name: string, email: string, password: string): Promise<{ message: string }> {
+        const { data } = await apiClient.post<{ message: string }>("/auth/register", {
             name,
             email,
             password,
@@ -50,6 +50,13 @@ export const authService = {
 
     async resetPassword(req: ResetPasswordRequest): Promise<{ message: string }> {
         const { data } = await apiClient.post<{ message: string }>("/auth/reset-password", req);
+        return data;
+    },
+
+    async verifyEmail(token: string): Promise<{ message: string }> {
+        const { data } = await apiClient.post<{ message: string }>(
+            `/auth/verify?verificationToken=${encodeURIComponent(token)}`
+        );
         return data;
     },
 };

@@ -1,4 +1,4 @@
-import { Rocket, Mail, Lock, Eye, EyeOff, User, Loader2, AlertCircle } from "lucide-react";
+import { Rocket, Mail, Lock, Eye, EyeOff, User, Loader2, AlertCircle, MailCheck } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../providers/AuthProvider";
@@ -9,8 +9,8 @@ import * as z from "zod";
 const registerSchema = z.object({
     name: z.string().min(2, "Name must be at least 2 characters"),
     email: z.string().email("Please enter a valid email address"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
-    confirmPassword: z.string().min(6, "Please confirm your password"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string().min(8, "Please confirm your password"),
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
     path: ["confirmPassword"],
@@ -30,6 +30,8 @@ const GoogleIcon = () => (
 export default function RegisterPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [registered, setRegistered] = useState(false);
+    const [registeredEmail, setRegisteredEmail] = useState("");
     const { register: signup, isLoading, error, clearError, isAuthenticated } = useAuth();
     const navigate = useNavigate();
 
@@ -57,10 +59,36 @@ export default function RegisterPage() {
     const onSubmit = async (data: RegisterFormValues) => {
         try {
             await signup(data.name, data.email, data.password);
+            setRegisteredEmail(data.email);
+            setRegistered(true);
         } catch (err) {
             console.error("Registration failed:", err);
         }
     };
+
+    if (registered) {
+        return (
+            <div className="min-h-screen flex items-center justify-center p-4 bg-bg-base relative overflow-hidden">
+                <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[50%] bg-brand-primary/10 blur-[120px] rounded-full pointer-events-none" />
+                <div className="absolute bottom-[-20%] left-[-10%] w-[50%] h-[50%] bg-accent-blue/10 blur-[120px] rounded-full pointer-events-none" />
+
+                <div className="glass w-full max-w-md p-8 rounded-3xl z-10 animate-in fade-in slide-in-from-bottom-8 duration-700 text-center">
+                    <MailCheck className="w-12 h-12 text-brand-primary mx-auto mb-6" />
+                    <h1 className="text-2xl font-bold mb-2 tracking-tight">Check your inbox</h1>
+                    <p className="text-text-secondary text-sm mb-8">
+                        We sent a verification link to <span className="text-text-primary font-medium">{registeredEmail}</span>.
+                        Click the link in the email to activate your account.
+                    </p>
+                    <Link
+                        to="/login"
+                        className="text-brand-primary hover:underline font-medium text-sm"
+                    >
+                        Back to Login
+                    </Link>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="flex flex-col md:flex-row min-h-screen bg-bg-base text-text-primary">

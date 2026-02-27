@@ -1,6 +1,6 @@
 package com.autoposter.gateway.filter;
 
-import com.autoposter.shared.trace.TraceIdUtil;
+import com.autoposter.common.trace.TraceIdUtil;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;

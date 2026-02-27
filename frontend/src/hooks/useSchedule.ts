@@ -17,6 +17,7 @@ export const useSchedule = () => {
             queryClient.setQueryData(["schedule"], response);
             toast.success("Schedule updated successfully");
         },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onError: (error: any) => {
             toast.error(error?.response?.data?.error?.message || "Failed to update schedule");
         }
@@ -28,6 +29,7 @@ export const useSchedule = () => {
             queryClient.invalidateQueries({ queryKey: ["schedule"] });
             toast.success("Schedule activated");
         },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onError: (error: any) => {
             toast.error(error?.response?.data?.error?.message || "Failed to activate schedule");
         }
@@ -39,6 +41,7 @@ export const useSchedule = () => {
             queryClient.invalidateQueries({ queryKey: ["schedule"] });
             toast.success("Schedule paused");
         },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onError: (error: any) => {
             toast.error(error?.response?.data?.error?.message || "Failed to pause schedule");
         }

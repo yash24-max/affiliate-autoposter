@@ -17,6 +17,7 @@ export const useAmazonConfig = () => {
             queryClient.setQueryData(["amazonConfig"], response);
             toast.success("Amazon configuration saved");
         },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onError: (error: any) => {
             toast.error(error?.response?.data?.error?.message || "Failed to save Amazon configuration");
         }
