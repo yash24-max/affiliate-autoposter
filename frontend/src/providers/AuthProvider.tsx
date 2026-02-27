@@ -6,6 +6,7 @@ interface AuthContextType {
     user: User | null;
     isAuthenticated: boolean;
     isLoading: boolean;
+    isInitializing: boolean;
     error: string | null;
     login: (email: string, password: string) => Promise<void>;
     register: (name: string, email: string, password: string) => Promise<void>;
@@ -20,7 +21,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const saved = localStorage.getItem("user");
         return saved ? JSON.parse(saved) : null;
     });
-    const [isLoading, setIsLoading] = useState(true);
+    const [isInitializing, setIsInitializing] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     const navigate = useNavigate();
@@ -46,7 +48,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     logout();
                 }
             }
-            setIsLoading(false);
+            setIsInitializing(false);
         };
 
         checkAuth();
@@ -64,7 +66,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         } catch (err) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const error = err as any;
-            setError(error.response?.data?.message || "Invalid credentials. Please try again.");
+            const apiError = error.response?.data?.error?.message || error.response?.data?.message || "Invalid credentials. Please try again.";
+            setError(apiError);
             throw error;
         } finally {
             setIsLoading(false);
@@ -80,7 +83,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         } catch (err) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const error = err as any;
-            setError(error.response?.data?.message || "Registration failed. Email might already exist.");
+            const apiError = error.response?.data?.error?.message || error.response?.data?.message || "Registration failed. Email might already exist.";
+            setError(apiError);
             throw error;
         } finally {
             setIsLoading(false);
@@ -96,6 +100,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             user,
             isAuthenticated: !!user,
             isLoading,
+            isInitializing,
             error,
             login,
             register,
