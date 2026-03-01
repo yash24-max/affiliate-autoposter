@@ -603,7 +603,7 @@ affiliate-autoposter/
 │       ├── v3-multiplatform-ai.md
 │       └── v4-saas-scale.md
 │
-├── autoposter-backend/       ← Spring Boot services (Maven multi-module)
+├── backend/                  ← Spring Boot services (Maven multi-module)
 │   ├── pom.xml               ← Parent POM
 │   ├── eureka-service/       ← Service registry (:8761) — IMPLEMENTED
 │   └── docs/
@@ -621,10 +621,10 @@ affiliate-autoposter/
 │       ├── design/           ← Design specification + flows
 │       ├── v2.md, v3.md, v4.md
 │
-├── n8n/                      ← n8n workflow exports and templates
-│   └── workflows/            ← JSON workflow definitions (version-controlled)
+├── workflows/                ← n8n workflow exports and templates
+│   └── templates/            ← JSON workflow definitions (version-controlled)
 │
-└── infra/                    ← Docker Compose, CI/CD, deployment configs
+└── infrastructure/           ← Docker Compose, CI/CD, deployment configs
     └── docs/
         ├── v1.md             ← Full infra V1 spec
         ├── v2.md, v3.md, v4.md

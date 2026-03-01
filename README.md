@@ -11,10 +11,10 @@ A B2C SaaS platform that automates affiliate marketing — connect Amazon Associ
 ## Directory Structure
 
 - `docs/` — Master plan, product vision, version phases
-- `autoposter-backend/` — Spring Boot services and API documentation
+- `backend/` — Spring Boot services and API documentation
 - `frontend/` — React application and UI documentation
-- `n8n/` — Workflow exports and templates (version-controlled JSON)
-- `infra/` — Infrastructure, CI/CD, deployment, observability
+- `workflows/` — n8n workflow exports and templates (version-controlled JSON)
+- `infrastructure/` — Docker Compose, CI/CD, deployment, observability
 
 ## Agent Ownership
 

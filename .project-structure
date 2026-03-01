@@ -1,0 +1,83 @@
+===========================================
+  AFFILIATE AUTOPOSTER PROJECT STRUCTURE
+===========================================
+
+ROOT LEVEL (Configuration & Entry Points)
+─────────────────────────────────────────
+README.md                    → Start here
+CLAUDE.md                    → Claude Code guidance (workflows, code review, testing)
+AGENTS.md                    → Backend development guidance (APIs, infra, DevOps)
+GEMINI.md                    → Frontend development guidance (React, UI/UX)
+PROJECT_OVERVIEW.md          → Complete project overview
+.gitignore                   → Git configuration
+
+
+DOCUMENTATION (Product & Planning)
+──────────────────────────────────
+docs/
+  ├── PLAN.md               → Master plan with version map
+  ├── overview/
+  │   ├── product-vision.md
+  │   └── glossary.md
+  └── phases/
+      ├── v1-foundation-and-mvp.md
+      ├── v2-visual-pinterest.md
+      ├── v3-multiplatform-ai.md
+      └── v4-saas-scale.md
+
+
+BACKEND (Spring Boot Microservices)
+──────────────────────────────────
+backend/
+  ├── pom.xml              → Parent Maven POM
+  ├── eureka-service/      → Service registry (:8761)
+  ├── api-gateway/         → API Gateway (:8080)
+  ├── auth-service/        → Auth & OAuth (:8081)
+  ├── user-config-service/ → Config CRUD (:8082)
+  ├── workflow-bridge-service/ → n8n Bridge (:8083)
+  ├── dashboard-service/   → Analytics (:8086)
+  ├── common-lib/          → Shared utilities
+  └── docs/
+      ├── v1.md, v2.md, v3.md, v4.md
+
+
+FRONTEND (React Application)
+───────────────────────────
+frontend/
+  ├── src/
+  │   ├── features/
+  │   ├── components/
+  │   ├── layouts/
+  │   └── lib/
+  ├── public/
+  ├── package.json
+  └── docs/
+      ├── v1.md, v2.md, v3.md, v4.md
+      └── design/
+
+
+WORKFLOWS (n8n Automation)
+─────────────────────────
+workflows/
+  ├── README.md            → Workflow management guide
+  └── templates/           → Workflow JSON exports
+      ├── posting-workflow-template.json
+      └── error-workflow.json
+
+
+INFRASTRUCTURE (DevOps & Deployment)
+────────────────────────────────────
+infrastructure/
+  ├── docker-compose.yml   → Local development
+  ├── kubernetes/          → K8s configs (V4)
+  ├── ci-cd/               → GitHub Actions workflows
+  └── docs/
+      ├── v1.md, v2.md, v3.md, v4.md
+
+
+AGENT OWNERSHIP
+───────────────
+CLAUDE.md   → Workflows, code review, testing, task coordination
+AGENTS.md   → Backend, CI/CD, infra, cloud, DevOps
+GEMINI.md   → Frontend, UI/UX, styling, routing
+

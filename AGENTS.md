@@ -32,8 +32,8 @@ This project uses a **hybrid architecture**: Spring Boot for APIs/auth/data + **
 
 ## Backend Module Structure
 
-All backend code lives under `autoposter-backend/`. It is a Maven multi-module project.
-The parent POM is `autoposter-backend/pom.xml`.
+All backend code lives under `backend/`. It is a Maven multi-module project.
+The parent POM is `backend/pom.xml`.
 
 ### Service Registry (must start first)
 
@@ -370,7 +370,7 @@ Rollback: redeploy prior versioned container image tag. For n8n: re-import previ
 
 ## Development Commands
 
-Run commands from `autoposter-backend/`:
+Run commands from `backend/`:
 - `mvn spring-boot:run -pl eureka-service` — start Eureka locally
 - `mvn clean package` — compile and package all modules
 - `mvn test` — run the verification suite
@@ -381,7 +381,7 @@ n8n CLI (inside container):
 - `n8n import:workflow --input=workflow.json` — import workflow from JSON
 
 Use `rg` for fast backend search, for example:
-- `rg "POST /api/schedule" autoposter-backend/docs`
+- `rg "POST /api/schedule" backend/docs`
 
 ---
 
@@ -410,14 +410,14 @@ Eureka service registry is complete and Dockerized. The next steps in order are:
 
 ## Backend Documentation
 
-- Full V1 specification: [`autoposter-backend/docs/v1.md`](autoposter-backend/docs/v1.md)
-- V2 delta (image templates, Pinterest): [`autoposter-backend/docs/v2.md`](autoposter-backend/docs/v2.md)
-- V3 delta (multi-platform, AI, Kafka): [`autoposter-backend/docs/v3.md`](autoposter-backend/docs/v3.md)
-- V4 delta (billing, agency, SaaS scale): [`autoposter-backend/docs/v4.md`](autoposter-backend/docs/v4.md)
+- Full V1 specification: [`backend/docs/v1.md`](backend/docs/v1.md)
+- V2 delta (image templates, Pinterest): [`backend/docs/v2.md`](backend/docs/v2.md)
+- V3 delta (multi-platform, AI, Kafka): [`backend/docs/v3.md`](backend/docs/v3.md)
+- V4 delta (billing, agency, SaaS scale): [`backend/docs/v4.md`](backend/docs/v4.md)
 
 ## API, Auth, and Data Conventions
 
-- Follow API naming and field contracts in `autoposter-backend/docs/v1.md`
+- Follow API naming and field contracts in `backend/docs/v1.md`
 - Standardize error responses with `errorCode`, `message`, `traceId`, and `timestamp`
 - Enforce least-privilege authorization on every protected endpoint
 - Never store integration credentials in plaintext; use encrypted-at-rest patterns
