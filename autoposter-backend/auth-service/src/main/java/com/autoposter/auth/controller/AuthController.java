@@ -24,7 +24,6 @@ public class AuthController {
     public ResponseEntity<ApiResponse<?>> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(request));
     }
-
     @PostMapping("/verify")
     public ResponseEntity<ApiResponse<?>> verify(@RequestParam("verificationToken") String verificationToken) {
         return ResponseEntity.ok(authService.verify(verificationToken));

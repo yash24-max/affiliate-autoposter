@@ -4,136 +4,217 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Scope
 
-CLAUDE.md covers **infrastructure, DevOps, cloud, testing, and product** concerns only.
-- Backend development is handled by **AGENTS.md**
+CLAUDE.md covers **n8n workflow orchestration, code review, testing, and cross-cutting task coordination**.
+- Backend development + CI/CD + Infra + Cloud + DevOps is handled by **AGENTS.md**
 - Frontend development is handled by **GEMINI.md**
 
 ---
 
-## Project Status
+## Hybrid Architecture Overview
 
-Documentation-first project. The `infra/` directory is empty and awaiting implementation. All specifications live in `docs/04-cloud-devops/` and `docs/06-quality/`.
+The Affiliate Autoposter uses a **hybrid architecture**: Spring Boot for APIs/auth/data + **n8n workflow engine** for automation (fetching, posting, scheduling).
+
+### What Stays as Code (Spring Boot)
+
+| Service | Role |
+|---------|------|
+| auth-service | Register, login, OAuth, JWT |
+| user-config-service | Amazon/Telegram/Schedule config CRUD |
+| workflow-bridge-service | Triggers n8n, receives callbacks, tracks executions |
+| dashboard-service | Analytics, post history |
+| api-gateway | Routing, JWT validation, rate limiting, CORS |
+| eureka-service | Service discovery |
+
+### What Moves to n8n
+
+| Eliminated Service | n8n Replacement |
+|-------------------|-----------------|
+| ~~scheduler-service~~ (Quartz) | n8n Cron Trigger nodes — one workflow instance per user |
+| ~~fetcher-service~~ | n8n HTTP Request nodes — calls Amazon PA API directly |
+| ~~pusher-service~~ | n8n Telegram nodes — publishes to user's channel |
+
+**Why n8n?** Eliminates 3 Spring Boot microservices. Visual workflow editor. Built-in retry/error handling. Per-user scheduling via workflow instances. Open-source, self-hosted.
 
 ---
 
-## Local Environment
+## System Architecture Diagram (V1)
 
-```bash
-docker compose up -d    # Start PostgreSQL + Redis
-docker compose down     # Stop services
+```
+Frontend (React 18)
+       │ HTTPS
+       ▼
+API Gateway (:8080)  ─── JWT validate · CORS · rate-limit · traceId
+       │
+       ├── auth-service (:8081)
+       ├── user-config-service (:8082)
+       ├── workflow-bridge-service (:8083)
+       └── dashboard-service (:8086)
+
+n8n Workflow Engine (:5678)
+       ├── Cron trigger → HTTP Request (bridge/config) → Amazon PA API → Telegram → Webhook (bridge/post-event)
+       └── Per-user workflow instances
+
+Eureka (:8761) │ PostgreSQL (autoposter_db + n8n_db) │ Redis (cache/auth)
 ```
 
-Infrastructure is not yet defined. A `docker-compose.yml` needs to be created under `infra/` providing PostgreSQL and Redis for local development.
-
 ---
 
-## Environment Model
+## n8n Workflow Engine
 
-| Environment | Purpose | Target |
-|-------------|---------|--------|
-| Dev | Local development | Docker Compose |
-| Stage | Integration validation | Railway / Render |
-| Prod | Live traffic | Railway / Render (V1), AWS+K8s (V4) |
+### How n8n Runs
+- Self-hosted Docker container alongside Spring Boot services
+- Accessible at `:5678` for workflow design (dev only — locked in prod)
+- Uses its own database (`n8n_db`) for workflow state and execution history
+- Communicates with Spring Boot via REST (workflow-bridge-service)
 
-**Required environment variables for all non-dev environments:**
+### n8n ↔ Spring Boot Communication
+
 ```
-DATABASE_URL, DB_USERNAME, DB_PASSWORD
-REDIS_URL
-JWT_SECRET, JWT_EXPIRY
-GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_CALLBACK_URL
-ENCRYPTION_MASTER_KEY
-APP_ENV    # dev | stage | prod
+Activate schedule:
+  Frontend → API Gateway → workflow-bridge-service → n8n REST API (create & activate workflow)
+
+Posting cycle (n8n executes autonomously):
+  n8n Cron fires
+    → n8n calls bridge GET /internal/user-config/{userId}
+    → n8n calls Amazon PA API (HTTP Request node)
+    → n8n calls Telegram Bot API (Telegram node)
+    → n8n calls bridge POST /internal/post-event (record result)
+
+Deactivate:
+  Frontend → API Gateway → workflow-bridge-service → n8n REST API (deactivate workflow)
 ```
 
 ---
 
-## CI/CD Pipeline
+## Data Flow: Posting Cycle
 
-Branch strategy:
-- `main` → production (manual approval gate required)
-- `dev` → staging (auto-deploy on merge)
-- Feature branches → PRs to `dev`
-
-Pipeline stages (to be implemented in CI platform):
-1. Checkout and dependency restore
-2. Build and unit tests
-3. Static checks (lint/format)
-4. Container image build and tag
-5. Deploy to stage (on `dev` merge) or prod (on `main` merge with approval)
-
-Rollback: redeploy prior versioned container image tag.
+```
+1. CONFIGURE  — User saves Amazon keys + Telegram token + schedule preferences
+2. ACTIVATE   — User clicks "Activate" → bridge creates & activates n8n workflow for this user
+3. AUTOPOST   — n8n cron fires at scheduled times:
+                a. GET /internal/user-config/{userId} from bridge (decrypted credentials)
+                b. HTTP Request to Amazon PA API (fetch trending products)
+                c. Select best product (by discount%, rating, category match)
+                d. Format affiliate link + post text
+                e. Send to Telegram channel via Telegram Bot API
+                f. POST /internal/post-event to bridge (record success/failure)
+4. DASHBOARD  — User views post history, success rate, estimated earnings
+```
 
 ---
 
-## Security
+## Credential Security
 
-- All external API secrets (Amazon PA API, Telegram bot tokens) must be **encrypted at rest** using `ENCRYPTION_MASTER_KEY`; never exposed in API responses or logs
-- JWT and OAuth secrets injected via environment variables only
-- Rate-limit auth and external integration test endpoints
-- All errors include a `traceId` correlation ID; sanitize messages before returning to clients
-- Auth and config change events must be logged for audit
+### Dual Encryption Layers
 
-Secret rotation runbook: rotate JWT/OAuth/API secrets in secret manager → restart services → validate auth and external integration health.
+1. **Application Layer (AES-256-GCM):** Amazon API keys and Telegram bot tokens encrypted by user-config-service before DB storage. Decrypted only when n8n requests them via bridge.
+
+2. **n8n Encryption:** n8n encrypts its own credential store with `N8N_ENCRYPTION_KEY`. Workflow templates reference credentials by ID, never plaintext.
+
+**Key rule:** Credentials traverse the wire (bridge → n8n) only over the internal Docker network. Never exposed in API responses, logs, or n8n workflow exports.
+
+---
+
+## Per-User Scheduling
+
+### V1 Strategy: One Workflow Per User
+- When user activates schedule, bridge calls n8n REST API to create a workflow instance from template
+- Workflow includes Cron node configured with user's timezone and posting times
+- Each user has an independent workflow — failures are isolated
+- Bridge tracks mapping: `user_id → n8n_workflow_id`
+
+### V3 Scale Plan
+- Single shared workflow with queue-based fan-out
+- n8n processes user batches from a job queue
+- Reduces workflow count from N (users) to fixed worker count
+
+---
+
+## n8n Posting Workflow Design
+
+Template workflow (cloned per user):
+
+```
+┌─────────────┐     ┌──────────────────┐     ┌─────────────────┐
+│ Cron Trigger │────▶│ HTTP Request     │────▶│ Function Node   │
+│ (user's tz)  │     │ GET bridge/config │     │ Parse config    │
+└─────────────┘     └──────────────────┘     └────────┬────────┘
+                                                       │
+                    ┌──────────────────┐     ┌─────────▼────────┐
+                    │ HTTP Request     │◀────│ HTTP Request     │
+                    │ POST bridge/     │     │ Amazon PA API    │
+                    │ post-event       │     │ (search products)│
+                    └──────────────────┘     └────────┬────────┘
+                           ▲                          │
+                           │              ┌───────────▼────────┐
+                           │              │ Function Node      │
+                           │              │ Select best product│
+                           │              │ Format post text   │
+                           │              └────────┬───────────┘
+                           │                       │
+                           │              ┌────────▼───────────┐
+                           └──────────────│ Telegram Node      │
+                                          │ Send to channel    │
+                                          └────────────────────┘
+```
+
+Error handling: n8n's built-in error workflow catches failures → records FAILED status via bridge callback.
+
+---
+
+## Code Review Guidelines
+
+Standards for PRs across all agents:
+
+1. **No plaintext secrets** — credentials must be encrypted at rest, never logged
+2. **Idempotent operations** — posting and scheduling must be safe to retry
+3. **Error handling** — all external calls (Amazon, Telegram, n8n API) must have timeouts and error responses
+4. **traceId propagation** — every request/response chain must carry X-Trace-Id
+5. **Schema safety** — DB migrations must be additive (no column drops without migration plan)
+6. **Test coverage** — new service logic requires unit tests; new endpoints require integration tests
+7. **No over-engineering** — solve the current requirement, not hypothetical future ones
 
 ---
 
 ## Testing Strategy
 
-**Release quality gate:** no release if the core flow (auth → config → schedule → post → dashboard) is broken.
+**Release quality gate:** no release if the core flow (auth → config → activate → autopost → dashboard) is broken.
 
 | Layer | Scope |
 |-------|-------|
-| Unit | Service logic, validators, utilities |
-| Integration | API ↔ DB and scheduler interactions |
-| Contract | External adapter behaviour (Amazon PA API, Telegram) |
-| End-to-end | Full user flow from config to scheduled post |
+| Unit | Service logic, validators, utilities, n8n Function node scripts |
+| Integration | API ↔ DB, bridge ↔ n8n API interactions |
+| Contract | External adapter behaviour (Amazon PA API, Telegram Bot API) |
+| End-to-end | Full user flow: register → configure → activate → verify post → check dashboard |
+
+### n8n-Specific Testing
+- Workflow template validation: ensure all nodes are connected and configured
+- Bridge endpoint contract tests: verify n8n receives expected response shapes
+- Cron scheduling verification: confirm correct timezone handling
+- Error workflow testing: verify failure recording via bridge callback
 
 ---
 
-## Observability
+## Version Evolution
 
-**Key signals to instrument:**
-- Request latency and 5xx error rate
-- Scheduler run outcomes (POSTED vs FAILED per user)
-- External API dependency status (Amazon, Telegram)
-- DB and Redis availability
-
-**Alert conditions:**
-- High 5xx error ratio
-- Repeated scheduler failures for a user
-- External API error spikes
-- Database connection pool exhaustion
-
-Dashboards must cover: API health/throughput, scheduler outcomes, external dependency status, DB/Redis availability.
+| Version | Workflow Changes |
+|---------|-----------------|
+| V1 | One n8n workflow per user, Telegram only, text posts |
+| V2 | Add image generation node (Playwright sidecar), Pinterest publisher node |
+| V3 | Shared queue-based workflow, multi-platform publisher nodes, AI product ranking node |
+| V4 | n8n clustered/HA mode, webhook-based monitoring, platform-specific workflow templates |
 
 ---
 
-## Runbooks
+## Implementation Order
 
-**Scheduler failure spike:** check scheduler metrics and failed job logs → validate Telegram/Amazon responses → pause affected user schedules if needed → hotfix or rollback.
-
-**Deployment rollback:** identify last stable container tag → redeploy → verify health endpoints → validate key user flows.
-
-**DB connection saturation:** check pool metrics and slow query logs → temporarily reduce scheduler concurrency → apply query/index optimization.
-
----
-
-## Backup and Recovery
-
-- Daily PostgreSQL backups with per-environment retention policy
-- V1 objectives: RPO 24 hours, RTO same-day
-- Recovery sequence: restore DB snapshot → validate schema and critical tables → re-enable scheduler in controlled mode → smoke-check auth, config, and posting flow
-
----
-
-## Infrastructure Scaling Path
-
-| Version | Infrastructure changes |
-|---------|----------------------|
-| V1 | Single backend service, PostgreSQL + Redis, basic monitoring |
-| V2 | Image rendering sidecar, cloud storage + CDN |
-| V3 | Kafka for async pipelines, ClickHouse for analytics, split publisher workers |
-| V4 | AWS managed data services, Kubernetes with horizontal autoscaling |
+1. **workflow-bridge-service** — REST endpoints for n8n ↔ Spring Boot communication
+2. **n8n Docker setup** — Add n8n container to docker-compose with PostgreSQL backend
+3. **Posting workflow template** — Design and test the base n8n workflow
+4. **Bridge → n8n integration** — Activate/deactivate workflows via n8n REST API
+5. **Error handling workflow** — n8n error workflow that calls bridge callback
+6. **Per-user workflow cloning** — Bridge creates workflow instances from template
+7. **End-to-end testing** — Full cycle: configure → activate → post → dashboard
 
 ---
 
